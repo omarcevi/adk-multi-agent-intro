@@ -4,6 +4,8 @@ from datetime import date
 
 from google.adk.agents import Agent
 
+MODEL = "gemini-2.5-flash"
+
 
 # A tool is just a Python function. ADK sends the name, type hints and
 # docstring to the model so it knows when (and how) to call it.
@@ -15,7 +17,7 @@ def get_current_date() -> str:
 
 root_agent = Agent(
     name="date_assistant",
-    model="gemini-2.5-flash",
+    model=MODEL,
     description="Answers questions about today's date.",
     # The model has no clock, so we tell it to use the tool instead.
     instruction=(
@@ -24,3 +26,14 @@ root_agent = Agent(
     ),
     tools=[get_current_date],  # <- KEY LINE: give the agent a tool
 )
+
+# Compare: the same agent WITHOUT the tool. Uncomment to swap it in.
+# With no tool it can only guess the date from its training data
+# (often wrong) or admit it doesn't know. No function call in adk web.
+
+# root_agent = Agent(
+#     name="date_assistant_no_tool",
+#     model=MODEL,
+#     description="Answers questions about today's date.",
+#     instruction="You are a helpful assistant.",
+# )
